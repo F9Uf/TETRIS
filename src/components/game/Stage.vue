@@ -10,7 +10,7 @@
             <template v-for="(cell, cellIndex) in row">
                 <Cell
                     :key="calIndex(rowIndex, cellIndex, row.length)"
-                    :type="'J'"/>
+                    :type="cell[0]"/>
             </template>
         </template>
     </div>

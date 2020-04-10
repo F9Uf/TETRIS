@@ -19,6 +19,6 @@ export default {
     margin: 0 auto;
     color: white;
     font-size: 1.3em;
-    font-weight: 900;
+    font-weight: 600;
 }
 </style>

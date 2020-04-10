@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="tetris">
-            <display text="Score: 200" />
+            <display :text="`SCORE : ${score}`" />
             <stage :stage="createArray()"/>
             <div class="row">
                 <base-button text="⯅" />
@@ -25,6 +25,14 @@ export default {
         Display,
         Stage,
         BaseButton
+    },
+    data () {
+        return {
+            dropTime: null,
+            gameOver: false,
+            stage: '',
+            score: 0
+        }
     },
     methods: {
         createArray () {
