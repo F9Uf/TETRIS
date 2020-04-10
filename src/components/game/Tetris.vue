@@ -2,19 +2,20 @@
     <div class="wrapper">
         <div class="tetris">
             <display :text="`SCORE : ${score}`" />
-            <stage :stage="createArray()"/>
+            <stage :stage="stage"/>
             <div class="row">
-                <base-button text="⯅" />
-                <base-button text="⯆" />
-                <base-button text="⯇" />
-                <base-button text="⯈" />
+                <base-button @click.native="onChangeDirection('up')" text="⯅" />
+                <base-button @click.native="onChangeDirection('down')" text="⯆" />
+                <base-button @click.native="onChangeDirection('left')" text="⯇" />
+                <base-button @click.native="onChangeDirection('right')" text="⯈" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { createStage } from '@/helper/gameHelper'
+import { createStage, STAGE_WIDTH } from '@/helper/gameHelper'
+import { TETROMINOS, randomTetromino } from '@/helper/tetrominos'
 
 import Stage from './Stage'
 import Display from './Display'
@@ -30,14 +31,50 @@ export default {
         return {
             dropTime: null,
             gameOver: false,
-            stage: '',
-            score: 0
+            stage: [],
+            score: 0,
+            level: 1,
+            rows: 0,
+            player: {
+                pos: { x:0, y: 0},
+                tetromino: TETROMINOS[0].shape,
+                collided: false
+            }
         }
     },
     methods: {
         createArray () {
             return createStage()
+        },
+        startGame () {
+            this.stage = createStage()
+            this.dropTime = 1000
+            this.player.tetromino = randomTetromino()
+            this.player.x = parseInt(STAGE_WIDTH/2)
+            this.player.y = 0
+        },
+        drop () {
+            if (rows > (level + 1) * 10) {
+                this.level = this.level + 1
+                dropTime = (1000 / (level + 1) + 200)
+            }
+        },
+        onChangeDirection (direction) {
+            if (direction === 'up') {
+                console.log('up')
+            } else if (direction === 'down') {
+                console.log('down')
+            } else if (direction === 'left') {
+                console.log('left')
+            } else if (direction === 'right') {
+                console.log('right')
+            } else {
+                console.log('hsldkfjlsdkjflkj')
+            }
         }
+    },
+    created () {
+        this.stage = createStage()
     }
 }
 </script>
