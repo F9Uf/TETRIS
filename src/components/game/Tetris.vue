@@ -1,13 +1,13 @@
 <template>
     <div class="wrapper">
         <div class="tetris">
-            <display text="Score" />
+            <display text="Score: 200" />
             <stage :stage="createArray()"/>
             <div class="row">
-                <base-button text="up" />
-                <base-button text="down" />
-                <base-button text="left" />
-                <base-button text="right" />
+                <base-button text="⯅" />
+                <base-button text="⯆" />
+                <base-button text="⯇" />
+                <base-button text="⯈" />
             </div>
         </div>
     </div>
@@ -50,5 +50,16 @@ export default {
     margin: 0 auto;
     max-width: 900px;
     flex-direction: column;
+}
+
+.row {
+    display: flex;
+    width: auto;
+    margin: 0 auto;
+    padding-top: 20px;
+
+    > * {
+        margin: 0 15px;
+    }
 }
 </style>

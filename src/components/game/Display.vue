@@ -11,6 +11,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.display {
+    // width: 100%;
+    // background-color: paleturquoise;
+    padding-bottom: 10px;
+    margin: 0 auto;
+    color: white;
+    font-size: 1.3em;
+    font-weight: 900;
+}
 </style>

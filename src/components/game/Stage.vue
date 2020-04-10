@@ -63,9 +63,10 @@ export default {
     display: grid;
     border: 2px solid #333;
     grid-gap: 1px;
-    width: 100%;
+    width: auto;
     min-width: 250px;
-    height: 75vh;
+    height: auto;
     background: #111;
+    margin: 0 auto;
 }
 </style>
