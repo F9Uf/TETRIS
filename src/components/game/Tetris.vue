@@ -1,15 +1,23 @@
 <template>
-    <div class="wrapper">
-        <div class="tetris">
+    <div
+        class="wrapper"
+        
+        @keypress.down="move('down')"
+        @keydown.left="move('left')"
+        @keyup.right="move('right')"
+    >
+        <div class="tetris" @keyup="move('sdflkjlk')">
             <display v-if="!gameOver" :text="`SCORE : ${score}`" />
-            <display v-if="gameOver" :text="`Game Over!! Your Score: ${score}`" />
+            <display v-if="gameOver" :text="`Game Over!! Your Score: ${score} 🚀`" />
             <stage :stage="stage"/>
             <div class="row">
-                <base-button @click.native="startGame()" text="↻" />
-                <base-button @click.native="move('up')" text="⯅" />
-                <base-button @click.native="move('down')" text="⯆" />
-                <base-button @click.native="move('left')" text="⯇" />
-                <base-button @click.native="move('right')" text="⯈" />
+                <base-button @click.native="move('left')" :type="1" text="◀" />
+                <base-button @click.native="move('up')" :type="1" text="▲" />
+                <base-button @click.native="move('down')" :type="1" text="▼" />
+                <base-button @click.native="move('right')" :type="1" text="▶" />
+            </div>
+            <div class="row">
+                <base-button @click.native="startGame()" :type="2" text="↻" />
             </div>
         </div>
     </div>
