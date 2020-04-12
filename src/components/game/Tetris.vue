@@ -1,7 +1,8 @@
 <template>
     <div class="wrapper">
         <div class="tetris">
-            <display :text="`SCORE : ${score}`" />
+            <display v-if="!gameOver" :text="`SCORE : ${score}`" />
+            <display v-if="gameOver" text="Game Over" />
             <stage :stage="stage"/>
             <div class="row">
                 <base-button @click.native="startGame()" text="↻" />
@@ -15,7 +16,7 @@
 </template>
 
 <script>
-import { createStage, STAGE_WIDTH } from '@/helper/gameHelper'
+import { createStage, STAGE_WIDTH, checkCollision } from '@/helper/gameHelper'
 import { TETROMINOS, randomTetromino } from '@/helper/tetrominos'
 
 import Stage from './Stage'
@@ -51,20 +52,33 @@ export default {
             // reset everthing
             this.stage = this.createArray()
             this.resetPlayer()
+            this.gameOver = false
             console.log('re-render')
         },
         drop () {
-            this.updatePlayerPos({ x: 0, y: 1, collided: false })
+            if (!checkCollision(this.player, this.stage, { x: 0, y: 1 })) {
+                this.updatePlayerPos({ x: 0, y: 1, collided: false })
+            } else {
+                // game over
+                if (this.player.pos.y < 1) {
+                    console.log('game over')
+                    this.gameOver = true
+                    this.dropTime = null
+                }
+                this.updatePlayerPos({ x: 0, y: 0, collided: true })
+            }
         },
         dropplayer () {
             this.drop()
         },
         moveplayer (dir) {
-            this.updatePlayerPos({ x: dir, y: 0})
+            if (!checkCollision(this.player, this.stage, { x: dir, y: 0 })) {
+                this.updatePlayerPos({ x: dir, y: 0})
+            }
         },
         move (direction) {
             if (direction === 'up') {
-                console.log('up')
+                this.playerRotate(this.stage, 1)
             } else if (direction === 'down') {
                 this.dropplayer()
             } else if (direction === 'left') {
@@ -96,6 +110,21 @@ export default {
                 collided: false
             }
         },
+        rotate(matrix, dir) {
+            // rotate
+            const rotatedTetro = matrix.map((_, index) => 
+                matrix.map(col => col[index])
+            )
+            // reverse each row
+            if (dir > 0) return rotatedTetro.map(row => row.reverse())
+            return rotatedTetro.reverse()
+        },
+        playerRotate (stage, dir) {
+            const clonedplayer = JSON.parse(JSON.stringify(this.player))
+            clonedplayer.tetromino = this.rotate(clonedplayer.tetromino, dir)
+
+            this.player = clonedplayer
+        },
         // stage
         updateStage () {
             // first flush the stage
@@ -115,6 +144,10 @@ export default {
                     }
                 })
             })
+            // then check if we collided    
+            if (this.player.collided) {
+                this.resetPlayer()
+            }
 
             this.stage = newStage
         }
