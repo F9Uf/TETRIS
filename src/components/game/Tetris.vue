@@ -37,6 +37,7 @@ export default {
             score: 0,
             level: 1,
             rowCleared: 0,
+            rows: 0,
             player: {
                 pos: { x:0, y: 0},
                 tetromino: TETROMINOS[0].shape,
@@ -58,6 +59,7 @@ export default {
             this.rowCleared = 0
             this.score = 0
             this.dropTime = 1000
+            this.row = 0
             if (this.interval) {
                 clearInterval(this.interval)
             }
@@ -67,6 +69,12 @@ export default {
             console.log('re-render')
         },
         drop () {
+            // up level
+            if (this.rows > (this.level + 1) * 10) {
+                this.level += 1
+                this.dropTime = 1000 / (this.level + 1) + 2000
+            }
+
             if (!checkCollision(this.player, this.stage, { x: 0, y: 1 })) {
                 this.updatePlayerPos({ x: 0, y: 1, collided: false })
             } else {
@@ -200,6 +208,7 @@ export default {
         rowCleared (after, before) {
             if (after > 0) {
                 this.score += this.linePoints[this.rowCleared - 1] * (this.level + 1)
+                this.row += this.rowCleared
                 this.rowCleared = 0
             }
         },
