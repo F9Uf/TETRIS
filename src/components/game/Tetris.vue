@@ -66,13 +66,13 @@ export default {
             if (direction === 'up') {
                 console.log('up')
             } else if (direction === 'down') {
-                console.log('down')
+                this.dropplayer()
             } else if (direction === 'left') {
-                console.log('left')
+                this.moveplayer(-1)
             } else if (direction === 'right') {
-                console.log('right')
+                this.moveplayer(1)
             } else {
-                console.log('hsldkfjlsdkjflkj')
+                console.log('no key')
             }
         },
         // player
