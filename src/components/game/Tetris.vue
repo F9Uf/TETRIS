@@ -167,17 +167,19 @@ export default {
                 row.map(cell => (cell[1] === 'clear' ? [0, 'clear'] : cell))
             )
 
-            // then draw the tetromino
-            this.player.tetromino.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    if (value !== 0) {
-                        newStage[y + this.player.pos.y][x + this.player.pos.x] = [
-                            value,
-                            `${this.player.collided ? 'merged' : 'clear'}`
-                        ]
-                    }
+            if (!checkCollision(this.player, prevStage, { x: 0, y: 0 })) {
+                // then draw the tetromino
+                this.player.tetromino.forEach((row, y) => {
+                    row.forEach((value, x) => {
+                        if (value !== 0) {
+                            newStage[y + this.player.pos.y][x + this.player.pos.x] = [
+                                value,
+                                `${this.player.collided ? 'merged' : 'clear'}`
+                            ]
+                        }
+                    })
                 })
-            })
+            }
             // then check if we collided    
             if (this.player.collided) {
                 this.resetPlayer()
@@ -216,6 +218,11 @@ export default {
         gameOver (after, before) {
             if (this.gameOver) {
                 clearInterval(this.interval)
+                this.player = {
+                    pos: { x: 0, y: 0},
+                    tetromino: TETROMINOS[0].shape,
+                    collided: true
+                }
             }
         }
     }
