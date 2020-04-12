@@ -2,7 +2,7 @@
     <div class="wrapper">
         <div class="tetris">
             <display v-if="!gameOver" :text="`SCORE : ${score}`" />
-            <display v-if="gameOver" text="Game Over" />
+            <display v-if="gameOver" :text="`Game Over!! Your Score: ${score}`" />
             <stage :stage="stage"/>
             <div class="row">
                 <base-button @click.native="startGame()" text="↻" />
@@ -42,7 +42,8 @@ export default {
                 tetromino: TETROMINOS[0].shape,
                 collided: false
             },
-            interval: null
+            interval: null,
+            linePoints: [40, 100, 300, 1000]
         }
     },
     methods: {
@@ -55,6 +56,7 @@ export default {
             this.resetPlayer()
             this.gameOver = false
             this.rowCleared = 0
+            this.score = 0
             this.dropTime = 1000
             if (this.interval) {
                 clearInterval(this.interval)
@@ -196,15 +198,13 @@ export default {
             this.updateStage()
         },
         rowCleared (after, before) {
-            if (after === 0) {
-                // when reset game
-                this.score = 0
-            } else {
-                this.score += (this.level * 10) + (after * 10)
+            if (after > 0) {
+                this.score += this.linePoints[this.rowCleared - 1] * (this.level + 1)
+                this.rowCleared = 0
             }
         },
         gameOver (after, before) {
-            if (after) {
+            if (this.gameOver) {
                 clearInterval(this.interval)
             }
         }
