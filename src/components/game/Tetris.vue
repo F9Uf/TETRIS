@@ -36,7 +36,7 @@ export default {
             stage: [],
             score: 0,
             level: 1,
-            rows: 0,
+            rowCleared: 0,
             player: {
                 pos: { x:0, y: 0},
                 tetromino: TETROMINOS[0].shape,
@@ -53,6 +53,7 @@ export default {
             this.stage = this.createArray()
             this.resetPlayer()
             this.gameOver = false
+            this.rowCleared = 0
             console.log('re-render')
         },
         drop () {
@@ -123,6 +124,18 @@ export default {
             const clonedplayer = JSON.parse(JSON.stringify(this.player))
             clonedplayer.tetromino = this.rotate(clonedplayer.tetromino, dir)
 
+            const pos = clonedplayer.pos.x
+            let offset = 1
+            while (checkCollision(clonedplayer, stage, { x: 0, y: 0 })) {
+                clonedplayer.pos.x += offset
+                offset =  -(offset + (offset > 0 ? 1 : -1))
+                if (offset > clonedplayer.tetromino[0].length) {
+                    this.rotate(clonedplayer.tetromino, -dir)
+                    clonedplayer.pos.x = pos
+                    return
+                }
+            }
+
             this.player = clonedplayer
         },
         // stage
@@ -147,9 +160,22 @@ export default {
             // then check if we collided    
             if (this.player.collided) {
                 this.resetPlayer()
+                this.stage = this.sweepRows(newStage)
+                return
             }
 
             this.stage = newStage
+        },
+        sweepRows (newStage) {
+            return newStage.reduce((ack, row) => {
+                if (row.findIndex(cell => cell[0] === 0) === -1) {
+                    this.rowCleared = this.rowCleared + 1
+                    ack.unshift(new Array(newStage[0].length).fill([0, 'clear']))
+                    return ack
+                }
+                ack.push(row)
+                return ack
+            }, [])
         }
     },
     created () {
