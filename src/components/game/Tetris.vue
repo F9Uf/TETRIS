@@ -60,6 +60,7 @@ export default {
             this.score = 0
             this.dropTime = 1000
             this.row = 0
+            this.level = 1
             if (this.interval) {
                 clearInterval(this.interval)
             }
