@@ -4,6 +4,7 @@
             <display :text="`SCORE : ${score}`" />
             <stage :stage="stage"/>
             <div class="row">
+                <base-button @click.native="startGame()" text="↻" />
                 <base-button @click.native="move('up')" text="⯅" />
                 <base-button @click.native="move('down')" text="⯆" />
                 <base-button @click.native="move('left')" text="⯇" />
@@ -49,7 +50,8 @@ export default {
         startGame () {
             // reset everthing
             this.stage = this.createArray()
-            this.resetPlayer();
+            this.resetPlayer()
+            console.log('re-render')
         },
         drop () {
             this.updatePlayerPos({ x: 0, y: 1, collided: false })
@@ -120,8 +122,10 @@ export default {
     created () {
         this.startGame()
     },
-    mounted () {
-        this.updateStage()
+    watch: {
+        player (after, before) {
+            this.updateStage()
+        }
     }
 }
 </script>
