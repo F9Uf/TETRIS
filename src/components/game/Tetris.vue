@@ -1,12 +1,6 @@
 <template>
-    <div
-        class="wrapper"
-        
-        @keypress.down="move('down')"
-        @keydown.left="move('left')"
-        @keyup.right="move('right')"
-    >
-        <div class="tetris" @keyup="move('sdflkjlk')">
+    <div class="wrapper">
+        <div class="tetris">
             <display v-if="!gameOver" :text="`SCORE : ${score}`" />
             <display v-if="gameOver" :text="`Game Over!! Your Score: ${score} 🚀`" />
             <stage :stage="stage"/>
@@ -211,6 +205,25 @@ export default {
     },
     created () {
         this.startGame()
+        window.addEventListener('keydown', e => {
+            switch (e.code) {
+                case 'ArrowUp':
+                    this.move('up')
+                    break
+                case 'ArrowDown':
+                    this.move('down')
+                    break
+                case 'ArrowRight':
+                    this.move('right')
+                    break
+                case 'ArrowLeft':
+                    this.move('left')
+                    break
+                case 'Space':
+                    this.startGame()
+                    break
+            }
+        })
     },
     watch: {
         player (after, before) {

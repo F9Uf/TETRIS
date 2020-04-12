@@ -43,22 +43,35 @@ $text_btn: white;
         top: 5px;
         background-color: $sec_btn1;
     }
-}
 
-.btn.btn-2 {
-    background-color: $prim_btn2;
-    box-shadow: 0px 5px $sec_btn2;
-
-    &:hover {
+    &.active {
         position: relative;
-        box-shadow: 0px 3px $sec_btn2;
-        top: 2px;
+        box-shadow: 0px 0px;
+        top: 5px;
+        background-color: $sec_btn1;
     }
-    &:active {
+
+    &.btn-2 {
+        background-color: $prim_btn2;
+        box-shadow: 0px 5px $sec_btn2;
+
+        &:hover {
+            position: relative;
+            box-shadow: 0px 3px $sec_btn2;
+            top: 2px;
+        }
+        &:active {
+            position: relative;
+            box-shadow: 0px 0px;
+            top: 5px;
+            background-color: $sec_btn2;
+        }
+        &.active {
         position: relative;
         box-shadow: 0px 0px;
         top: 5px;
         background-color: $sec_btn2;
+    }
     }
 }
 </style>
