@@ -41,7 +41,8 @@ export default {
                 pos: { x:0, y: 0},
                 tetromino: TETROMINOS[0].shape,
                 collided: false
-            }
+            },
+            interval: null
         }
     },
     methods: {
@@ -54,6 +55,13 @@ export default {
             this.resetPlayer()
             this.gameOver = false
             this.rowCleared = 0
+            this.dropTime = 1000
+            if (this.interval) {
+                clearInterval(this.interval)
+            }
+            this.interval = setInterval(() => {
+                this.drop()
+            }, this.dropTime)
             console.log('re-render')
         },
         drop () {
@@ -78,16 +86,18 @@ export default {
             }
         },
         move (direction) {
-            if (direction === 'up') {
-                this.playerRotate(this.stage, 1)
-            } else if (direction === 'down') {
-                this.dropplayer()
-            } else if (direction === 'left') {
-                this.moveplayer(-1)
-            } else if (direction === 'right') {
-                this.moveplayer(1)
-            } else {
-                console.log('no key')
+            if (!this.gameOver) {
+                if (direction === 'up') {
+                    this.playerRotate(this.stage, 1)
+                } else if (direction === 'down') {
+                    this.dropplayer()
+                } else if (direction === 'left') {
+                    this.moveplayer(-1)
+                } else if (direction === 'right') {
+                    this.moveplayer(1)
+                } else {
+                    console.log('no key')
+                }
             }
         },
         // player
@@ -184,6 +194,19 @@ export default {
     watch: {
         player (after, before) {
             this.updateStage()
+        },
+        rowCleared (after, before) {
+            if (after === 0) {
+                // when reset game
+                this.score = 0
+            } else {
+                this.score += (this.level * 10) + (after * 10)
+            }
+        },
+        gameOver (after, before) {
+            if (after) {
+                clearInterval(this.interval)
+            }
         }
     }
 }
