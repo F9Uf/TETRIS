@@ -4,10 +4,10 @@
             <display :text="`SCORE : ${score}`" />
             <stage :stage="stage"/>
             <div class="row">
-                <base-button @click.native="onChangeDirection('up')" text="⯅" />
-                <base-button @click.native="onChangeDirection('down')" text="⯆" />
-                <base-button @click.native="onChangeDirection('left')" text="⯇" />
-                <base-button @click.native="onChangeDirection('right')" text="⯈" />
+                <base-button @click.native="move('up')" text="⯅" />
+                <base-button @click.native="move('down')" text="⯆" />
+                <base-button @click.native="move('left')" text="⯇" />
+                <base-button @click.native="move('right')" text="⯈" />
             </div>
         </div>
     </div>
@@ -47,19 +47,20 @@ export default {
             return createStage()
         },
         startGame () {
-            this.stage = createStage()
-            this.dropTime = 1000
-            this.player.tetromino = randomTetromino()
-            this.player.x = parseInt(STAGE_WIDTH/2)
-            this.player.y = 0
+            // reset everthing
+            this.stage = this.createArray()
+            this.resetPlayer();
         },
         drop () {
-            if (rows > (level + 1) * 10) {
-                this.level = this.level + 1
-                dropTime = (1000 / (level + 1) + 200)
-            }
+            this.updatePlayerPos({ x: 0, y: 1, collided: false })
         },
-        onChangeDirection (direction) {
+        dropplayer () {
+            this.drop()
+        },
+        moveplayer (dir) {
+            this.updatePlayerPos({ x: dir, y: 0})
+        },
+        move (direction) {
             if (direction === 'up') {
                 console.log('up')
             } else if (direction === 'down') {
@@ -71,10 +72,56 @@ export default {
             } else {
                 console.log('hsldkfjlsdkjflkj')
             }
+        },
+        // player
+        updatePlayerPos ({ x, y, collided }) {
+            this.player = {
+                ...this.player,
+                pos: {
+                    x: this.player.pos.x += x,
+                    y: this.player.pos.y += y
+                },
+                collided
+            }
+        },
+        resetPlayer () {
+            this.player = {
+                pos: {
+                    x: STAGE_WIDTH / 2 - 2,
+                    y: 0
+                }, 
+                tetromino: randomTetromino().shape,
+                collided: false
+            }
+        },
+        // stage
+        updateStage () {
+            // first flush the stage
+            const prevStage = [ ...this.stage ]
+            const newStage = prevStage.map(row =>
+                row.map(cell => (cell[1] === 'clear' ? [0, 'clear'] : cell))
+            )
+
+            // then draw the tetromino
+            this.player.tetromino.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        newStage[y + this.player.pos.y][x + this.player.pos.x] = [
+                            value,
+                            `${this.player.collided ? 'merged' : 'clear'}`
+                        ]
+                    }
+                })
+            })
+
+            this.stage = newStage
         }
     },
     created () {
-        this.stage = createStage()
+        this.startGame()
+    },
+    mounted () {
+        this.updateStage()
     }
 }
 </script>
