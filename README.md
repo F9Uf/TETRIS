@@ -1,5 +1,5 @@
 # vue-tetris
-Tetris web game base on vue.js
+Tetris web game based on vue.js
 
 ## Demo
 https://vue-tetris.netlify.app/
