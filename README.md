@@ -1,19 +1,7 @@
 # vue-tetris
+Tetris web game base on vue.js
 
-## Project setup
-```
-yarn install
-```
+## Demo
+https://vue-tetris.netlify.app/
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<img src="tetris_demo.gif" />
